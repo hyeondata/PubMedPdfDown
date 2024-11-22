@@ -1,13 +1,12 @@
 from keywardToPdf.Parsing import Parsing  
 
-def main():
+def main(keywords):
     try:
         # 단일 키워드 검색
         # parser = Parsing("cancer", num_of_articles=3)
         # articles_info = parser.get_articles_info()
         
-        # 여러 키워드로 검색하는 경우
-        keywords = "behavior; brain; collagenases"
+        # 여러 키워드로 검색하는 경우"
         parser_multiple = Parsing(keywords, num_of_articles=3)
         articles_info_multiple = parser_multiple.get_articles_info()
         # print(len(articles_info_multiple))
@@ -22,4 +21,5 @@ def main():
         print(f"Error in main: {str(e)}")
 
 if __name__ == "__main__":
-    main()
+    keywords = "behavior; brain; collagenases"
+    main(keywords=keywords)
