@@ -1,0 +1,26 @@
+# Python 3.11 베이스 이미지 사용
+FROM python:3.11-slim
+
+# 필요한 패키지 설치
+RUN apt-get update && apt-get install -y \
+    poppler-utils \
+    tesseract-ocr \
+    tesseract-ocr-kor \
+    tesseract-ocr-eng \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# 작업 디렉토리 생성
+WORKDIR /app
+
+# GitHub 저장소 클론
+RUN git clone https://github.com/hyeondata/PubMedPdfDown.git .
+
+# Python 패키지 설치
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 기본 .env 파일 생성 (실제 값은 외부에서 오버라이드됨)
+RUN echo "EMAIL=default@example.com\nPASSWORD=default" > .env
+
+# 컨테이너 실행 시 사용할 명령어
+CMD ["python", "main.py"]

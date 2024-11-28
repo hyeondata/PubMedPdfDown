@@ -1,0 +1,8 @@
+# Test directories
+test/
+/test/
+**/test/
+.env
+*.pyc
+*.pdf
+**/__pycache__/

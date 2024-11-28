@@ -12,11 +12,12 @@ from bs4 import BeautifulSoup
 
 class Parsing:
     
-    def __init__(self, keyword, num_of_articles=3):
+    def __init__(self, keyword, num_of_articles=10):
         self.keyword = keyword
         self.num_of_articles = num_of_articles
         self.pmids = []
         self.fetch = PubMedFetcher()
+        self.fileDown = False
     def search_metapub(self):
 
         articles = {}
@@ -70,9 +71,9 @@ class Parsing:
 
             # 특정 태그에서 데이터 추출
             title = soup.title.text
-            # print("웹 페이지 제목:", title)
-
+            print("웹 페이지 제목:", title)
             pdf_url = soup.select_one('#full-view-identifiers > li:nth-child(2) > span > a')
+            print(pdf_url.text)
 
             if 'pmc' in pdf_url.text.lower():
                 response = requests.get(pdf_url.get('href'),headers={"User-Agent": "Mozilla/5.0"})
@@ -128,7 +129,7 @@ class Parsing:
                 print(pmid)
                 if not filename.lower().endswith('.pdf'):
                     filename += '.pdf'
-                save_path = filename
+                save_path = "./pdfFile/"+filename
 
             # 파일 저장
             with open(save_path, 'wb') as file:
@@ -137,6 +138,7 @@ class Parsing:
                         file.write(chunk)
 
             print(f"파일이 성공적으로 다운로드되었습니다: {save_path}")
+            self.fileDown = True
             return save_path
 
         except requests.exceptions.RequestException as e:
@@ -151,4 +153,5 @@ class Parsing:
         articles_info = self.get_articles_info()
         for article in articles_info:
             # print(article['url'])
-            self.parse_url(article['url'], article['pmid'])
+            if self.fileDown == False:
+                self.parse_url(article['url'], article['pmid'])
